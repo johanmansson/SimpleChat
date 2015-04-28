@@ -51,11 +51,12 @@ public class ConnectPane extends BasicPane {
             String port = fields[1].getText();
             String name = fields[2].getText();
 
-            if(chatClient.startConnection(ipAddress, port)) {
+            if(!chatClient.isConnected() && name.length() > 0) {
+                chatClient.startConnection(ipAddress, port);
                 chatClient.setName(name);
                 messageLabel.setText("Connected to server.");
             } else {
-                messageLabel.setText("Could not connect to server.");
+                messageLabel.setText("Could not connect or already connected.");
             }
 
 

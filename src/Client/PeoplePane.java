@@ -4,13 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Created by johanmansson on 15-04-27.
  */
 public class PeoplePane extends BasicPane {
     private static final long serialVersionUID = 1;
-    private DefaultListModel<String> cookieListModel;
+    private DefaultListModel<String> peopleListModel;
     private JList<String> peopleList;
 
     public PeoplePane(ChatClient chatClient) {
@@ -18,9 +19,9 @@ public class PeoplePane extends BasicPane {
 
     }
     public JComponent createMiddlePanel() {
-        cookieListModel = new DefaultListModel<String>();
+        peopleListModel = new DefaultListModel<String>();
 
-        peopleList = new JList<String>(cookieListModel);
+        peopleList = new JList<String>(peopleListModel);
         peopleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         peopleList.setPrototypeCellValue("123456789012");
 
@@ -43,8 +44,18 @@ public class PeoplePane extends BasicPane {
 
     }
 
+    public void fillPeopleList() {
+        peopleListModel.removeAllElements();
+        ArrayList<String> people = chatClient.getPeople();
+
+        for(String name : people) {
+            peopleListModel.addElement(name);
+        }
+    }
+
     public void entryActions() {
         clearMessage();
+        fillPeopleList();
 
     }
 

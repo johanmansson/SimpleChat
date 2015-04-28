@@ -2,6 +2,7 @@ package Client;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 
 /**
@@ -18,6 +19,7 @@ public class ChatWindow {
     private boolean       destroyed;
     private SubmitThread  submitter;
 
+
     /**
      * Constructs a ChatWindow at a given position on the screen and with
      * a given title which is displayed in the title bar of the window. Note
@@ -31,6 +33,8 @@ public class ChatWindow {
      *               the title bar of the window
      */
     public ChatWindow(int x,int y,String title) {
+
+
         theWindow = new Frame(title);
         theWindow.setLocation(x,y);
 

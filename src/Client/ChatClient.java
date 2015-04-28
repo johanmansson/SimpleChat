@@ -3,6 +3,7 @@ package Client;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 
 /**
@@ -10,14 +11,22 @@ import java.net.*;
  */
 public class ChatClient extends ChatWindow {
     private Socket socket;
+    private Boolean isConnected;
+    private ArrayList<String> people;
 
 
     public ChatClient(int x, int y, String title) {
         super(x, y, title);
+        isConnected = false;
+        people = new ArrayList<String>();
 
     }
 
-    public boolean startConnection(String address, String inPort) {
+    public Boolean isConnected() {
+        return isConnected;
+    }
+
+    public void startConnection(String address, String inPort) {
         socket = null;
         try {
             int port = Integer.parseInt(inPort);
@@ -25,13 +34,13 @@ public class ChatClient extends ChatWindow {
             System.out.println("Connected to: " + socket.getInetAddress().getHostName());
             GetMessageThread writer = new GetMessageThread(socket);
             writer.start();
-            return true;
+            isConnected = true;
 
 
 
         } catch(IOException e) {
             System.out.println(e);
-            return false;
+
         }
 
     }
@@ -56,6 +65,10 @@ public class ChatClient extends ChatWindow {
         }
     }
 
+    public ArrayList<String> getPeople() {
+        return people;
+    }
+
 
     public class GetMessageThread extends Thread {
         private Socket socket;
@@ -69,10 +82,12 @@ public class ChatClient extends ChatWindow {
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 while ((getMessage = in.readLine()) != null ) {
-                    System.out.println(getMessage);
-
-                   add(getMessage);
-
+                    if(getMessage.startsWith("P:")) {
+                        people.add(getMessage.substring(3));
+                    } else {
+                        System.out.println(getMessage);
+                        add(getMessage);
+                    }
 
                 }
 

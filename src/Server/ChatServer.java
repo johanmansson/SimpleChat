@@ -2,6 +2,7 @@ package Server;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,6 +14,7 @@ public class ChatServer {
     private ServerSocket serverSocket;
     private Mailbox mailBox;
     private Vector<ClientThread> clients;
+    private ArrayList<String> people;
 
 
 
@@ -31,6 +33,7 @@ public class ChatServer {
         super();
         mailBox = new Mailbox();
         clients = new Vector<ClientThread>();
+        people = new ArrayList<String>();
         MailboxReader reader = new MailboxReader(mailBox, clients);
 
         ExecutorService pool = Executors.newFixedThreadPool(maxNumberOfClients);
@@ -39,14 +42,17 @@ public class ChatServer {
             serverSocket = new ServerSocket();
             serverSocket.bind(new InetSocketAddress(portNbr));
             System.out.println("Server running...");
+
             reader.start();
 
 
             while(true) {
                 Socket clientSocket = serverSocket.accept();
-                ClientThread clientThread = new ClientThread(clientSocket, mailBox);
+                ClientThread clientThread = new ClientThread(clientSocket, mailBox, clients);
                 clients.add(clientThread);
+
                 pool.submit(clientThread);
+                clientThread.sendPeopleList();
 
 
             }

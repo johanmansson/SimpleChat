@@ -6,6 +6,7 @@ import javax.swing.event.ChangeListener;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 
 /**
@@ -16,8 +17,10 @@ public class StartWindow {
     protected JTextArea resultArea;
     protected ChatClient chatClient;
 
+
     public StartWindow(ChatClient chatClient) {
         this.chatClient = chatClient;
+
 
         JFrame frame = new JFrame("SimpleChat");
         tabbedPane = new JTabbedPane();

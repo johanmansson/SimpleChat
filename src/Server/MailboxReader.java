@@ -18,6 +18,7 @@ public class MailboxReader extends Thread {
 
     public void run() {
         while (true) {
+
             String message = mailBox.getMessage();
             for (ClientThread ch : clients) {
                 ch.writeToClient(message);
@@ -31,6 +32,7 @@ public class MailboxReader extends Thread {
         }
 
     }
+
 
 
 

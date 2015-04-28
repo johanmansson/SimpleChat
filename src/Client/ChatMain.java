@@ -1,5 +1,7 @@
 package Client;
 
+import java.util.ArrayList;
+
 /**
  * Created by johanmansson on 15-04-27.
  */

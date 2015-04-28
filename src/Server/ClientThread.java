@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Vector;
 
 /**
  * Created by johanmansson on 15-04-12.
@@ -14,12 +15,14 @@ public class ClientThread extends Thread {
     private Mailbox mailBox;
     private String name;
     private SimpleDateFormat timeStamp;
+    private Vector<ClientThread> clients;
 
 
-    public ClientThread(Socket clientSocket, Mailbox mailBox) {
+    public ClientThread(Socket clientSocket, Mailbox mailBox, Vector<ClientThread> clients) {
 
         this.clientSocket = clientSocket;
         this.mailBox = mailBox;
+        this.clients = clients;
         name = "Anonymous";
         timeStamp = new SimpleDateFormat("HH.mm");
 
@@ -68,6 +71,15 @@ public class ClientThread extends Thread {
 
     }
 
+    public void sendPeopleList() {
+        for(ClientThread ch : clients) {
+            String name = ch.getUserName();
+            if(name != "Anonymous")
+            writeToClient("P: " + name);
+        }
+    }
+
+
     public void writeToClient(String message) {
         try {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -83,6 +95,10 @@ public class ClientThread extends Thread {
 
 
 
+    }
+
+    public String getUserName() {
+        return name;
     }
 
 
