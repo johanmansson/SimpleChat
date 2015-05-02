@@ -18,6 +18,7 @@ public class ChatServer {
 
 
 
+
     public static void main(String[] args) {
         if(args.length!=1) {
             System.out.println("Usage: java ChatServer <port number>");
@@ -54,6 +55,7 @@ public class ChatServer {
                 pool.submit(clientThread);
                 clientThread.sendPeopleList();
 
+                updateClients();
 
             }
 
@@ -66,12 +68,25 @@ public class ChatServer {
         }
 
 
+
+
+
+
     }
 
+    private void updateClients(){
+        for(ClientThread thread : clients) {
+            if (thread.getSocket().isClosed()) {
+                System.out.print("TEST");
+                clients.remove(thread);
+            }
+        }
 
+        for(ClientThread thread: clients) {
+            thread.sendFlushCommand();
+            thread.sendPeopleList();
+        }
+        System.out.println(clients.size());
 
-
-
-
-
+    }
 }

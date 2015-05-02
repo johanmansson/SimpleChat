@@ -54,6 +54,7 @@ public class PeoplePane extends BasicPane {
     }
 
     public void entryActions() {
+
         clearMessage();
         fillPeopleList();
 

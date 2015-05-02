@@ -79,6 +79,11 @@ public class ClientThread extends Thread {
         }
     }
 
+    public void sendFlushCommand(){
+        writeToClient("flush_SOME_CODE_TO_NOT_ACCIDENTALLY_WRITE_COMMAND");
+    }
+
+
 
     public void writeToClient(String message) {
         try {
@@ -100,6 +105,8 @@ public class ClientThread extends Thread {
     public String getUserName() {
         return name;
     }
+
+    public Socket getSocket() { return clientSocket;}
 
 
 

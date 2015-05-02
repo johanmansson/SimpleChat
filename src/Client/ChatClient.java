@@ -69,6 +69,10 @@ public class ChatClient extends ChatWindow {
         return people;
     }
 
+    public void flushPeople(){
+        people = new ArrayList<String>();
+    }
+
 
     public class GetMessageThread extends Thread {
         private Socket socket;
@@ -84,7 +88,9 @@ public class ChatClient extends ChatWindow {
                 while ((getMessage = in.readLine()) != null ) {
                     if(getMessage.startsWith("P:")) {
                         people.add(getMessage.substring(3));
-                    } else {
+                    } else if(getMessage.equals("flush_SOME_CODE_TO_NOT_ACCIDENTALLY_WRITE_COMMAND")){
+                        flushPeople();
+                    }else{
                         System.out.println(getMessage);
                         add(getMessage);
                     }
