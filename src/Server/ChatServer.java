@@ -19,6 +19,7 @@ public class ChatServer {
 
 
 
+
     public static void main(String[] args) {
         if(args.length!=1) {
             System.out.println("Usage: java ChatServer <port number>");
@@ -47,6 +48,11 @@ public class ChatServer {
             reader.start();
 
 
+            //Thread for keeping the the client list updated and keeping the people lists within the clients updated
+            UpdateThread updateThread = new UpdateThread(clients);
+            updateThread.start();
+
+
             while(true) {
                 Socket clientSocket = serverSocket.accept();
                 ClientThread clientThread = new ClientThread(clientSocket, mailBox, clients);
@@ -55,12 +61,9 @@ public class ChatServer {
                 pool.submit(clientThread);
                 clientThread.sendPeopleList();
 
-                updateClients();
+
 
             }
-
-
-
 
         } catch(IOException e) {
             e.printStackTrace();
@@ -74,19 +77,4 @@ public class ChatServer {
 
     }
 
-    private void updateClients(){
-        for(ClientThread thread : clients) {
-            if (thread.getSocket().isClosed()) {
-                System.out.print("TEST");
-                clients.remove(thread);
-            }
-        }
-
-        for(ClientThread thread: clients) {
-            thread.sendFlushCommand();
-            thread.sendPeopleList();
-        }
-        System.out.println(clients.size());
-
-    }
 }

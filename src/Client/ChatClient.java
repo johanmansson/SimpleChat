@@ -107,7 +107,4 @@ public class ChatClient extends ChatWindow {
 
     }
 
-
-
-
 }
