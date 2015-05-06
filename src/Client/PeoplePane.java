@@ -56,7 +56,10 @@ public class PeoplePane extends BasicPane {
     public void entryActions() {
 
         clearMessage();
-        fillPeopleList();
+
+        //Updates peopleList automatic
+        UpdateList update = new UpdateList();
+        update.start();
 
     }
 
@@ -88,6 +91,24 @@ public class PeoplePane extends BasicPane {
                 buttons[i].addActionListener(actHand);
             }
         }
+    }
+
+    public class UpdateList extends Thread {
+
+        public void run() {
+            while(true) {
+                try {
+                    Thread.sleep(2000);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                fillPeopleList();
+
+
+            }
+        }
+
+
     }
 
 
