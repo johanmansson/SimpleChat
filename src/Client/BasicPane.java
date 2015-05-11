@@ -12,11 +12,11 @@ public class BasicPane extends JPanel {
     private static final long serialVersionUID = 1;
 
     protected JLabel messageLabel;
-    protected ChatClient chatClient;
+    protected ClientHandler clientHandler;
 
-    public BasicPane(ChatClient chatClient) {
+    public BasicPane(ClientHandler clientHandler) {
 
-        this.chatClient = chatClient;
+        this.clientHandler = clientHandler;
         messageLabel = new JLabel("      ");
 
         setLayout(new BorderLayout());

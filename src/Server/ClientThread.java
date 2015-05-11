@@ -54,7 +54,7 @@ public class ClientThread extends Thread {
                 }
                 if (message.startsWith("M:")) {
 
-                    mailBox.setMessage(timeStamp.format(Calendar.getInstance().getTime()) + " " + name + ": " + message.substring(3));
+                    mailBox.setMessage("M:" + timeStamp.format(Calendar.getInstance().getTime()) + " " + name + ": " + message.substring(3));
                 }
 
             }
@@ -72,10 +72,12 @@ public class ClientThread extends Thread {
     }
 
     public void sendPeopleList() {
+
         for(ClientThread ch : clients) {
             String name = ch.getUserName();
-            if(name != "Anonymous")
-            writeToClient("P: " + name);
+            if(name != "Anonymous") {
+                writeToClient("P: " + name);
+            }
         }
     }
 

@@ -9,16 +9,18 @@ import java.util.ArrayList;
 /**
  * Created by johanmansson on 15-04-13.
  */
-public class ChatClient extends ChatWindow {
+public class ClientHandler {
     private Socket socket;
     private Boolean isConnected;
     private ArrayList<String> people;
+    private ArrayList<NewChatWindow> chatWindows;
 
 
-    public ChatClient(int x, int y, String title) {
-        super(x, y, title);
+    public ClientHandler() {
+
         isConnected = false;
         people = new ArrayList<String>();
+        chatWindows = new ArrayList<NewChatWindow>();
 
     }
 
@@ -32,7 +34,7 @@ public class ChatClient extends ChatWindow {
             int port = Integer.parseInt(inPort);
             socket = new Socket(address, port);
             System.out.println("Connected to: " + socket.getInetAddress().getHostName());
-            GetMessageThread writer = new GetMessageThread(socket);
+            GetInputThread writer = new GetInputThread(socket);
             writer.start();
             isConnected = true;
 
@@ -55,15 +57,28 @@ public class ChatClient extends ChatWindow {
         }
     }
 
-    public void messageEntered(String message) {
-        try {
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            out.println("M: " + message);
+    public void newChatWindow(String name) {
+        Boolean test = false;
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        for(int i = 0; i < chatWindows.size(); i++) {
+            if(chatWindows.get(i).getTitle() == name) {
+                test = true;
+                chatWindows.get(i).show();
+            }
         }
+
+        if(test == false) {
+            NewChatWindow temp = new NewChatWindow(100,100,name, socket);
+            temp.show();
+            chatWindows.add(temp);
+
+        }
+
+        System.out.println("Total number of chatwindows: " + chatWindows.size());
+        System.out.println("Status: " + test);
+
     }
+
 
     public ArrayList<String> getPeople() {
         return people;
@@ -74,29 +89,35 @@ public class ChatClient extends ChatWindow {
     }
 
 
-    public class GetMessageThread extends Thread {
+    public class GetInputThread extends Thread {
         private Socket socket;
 
-        public GetMessageThread(Socket socket) {
+        public GetInputThread(Socket socket) {
             this.socket = socket;
         }
 
         public void run() {
-            String getMessage;
+            String input;
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                while ((getMessage = in.readLine()) != null ) {
-                    if(getMessage.startsWith("P:")) {
-                        people.add(getMessage.substring(3));
-                    } else if(getMessage.equals("flush_SOME_CODE_TO_NOT_ACCIDENTALLY_WRITE_COMMAND")){
+
+                while ((input = in.readLine()) != null ) {
+
+                    if (input.startsWith("P:")) {
+                        people.add(input.substring(3));
+                    }
+                    if (input.equals("flush_SOME_CODE_TO_NOT_ACCIDENTALLY_WRITE_COMMAND")) {
                         flushPeople();
-                    }else{
-                        System.out.println(getMessage);
-                        add(getMessage);
+                    }
+                    if (input.startsWith("M:")) {
+                        //System.out.println(input.substring(3));
+                        for(NewChatWindow nCW: chatWindows) {
+                            nCW.add(input.substring(3));
+                        }
                     }
 
-                }
 
+                }
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();

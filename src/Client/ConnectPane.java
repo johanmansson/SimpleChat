@@ -14,7 +14,7 @@ public class ConnectPane extends BasicPane {
 
     private static final int NBR_FIELDS = 3;
 
-    public ConnectPane(ChatClient chatClient) {
+    public ConnectPane(ClientHandler chatClient) {
         super(chatClient);
     }
 
@@ -51,9 +51,9 @@ public class ConnectPane extends BasicPane {
             String port = fields[1].getText();
             String name = fields[2].getText();
 
-            if(!chatClient.isConnected() && name.length() > 0) {
-                chatClient.startConnection(ipAddress, port);
-                chatClient.setName(name);
+            if(!clientHandler.isConnected() && name.length() > 0) {
+                clientHandler.startConnection(ipAddress, port);
+                clientHandler.setName(name);
                 messageLabel.setText("Connected to server.");
             } else {
                 messageLabel.setText("Could not connect or already connected.");

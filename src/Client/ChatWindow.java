@@ -18,6 +18,7 @@ public class ChatWindow {
     private SubmitHandler handler;
     private boolean       destroyed;
     private SubmitThread  submitter;
+    private String title;
 
 
     /**
@@ -35,6 +36,7 @@ public class ChatWindow {
     public ChatWindow(int x,int y,String title) {
 
 
+        this.title = title;
         theWindow = new Frame(title);
         theWindow.setLocation(x,y);
 
@@ -130,6 +132,12 @@ public class ChatWindow {
         destroyed = true;
         theWindow.dispose();
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+
 
     /**
      * The <code>messageEntered</code> method is called whenever the user

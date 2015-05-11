@@ -6,7 +6,6 @@ import javax.swing.event.ChangeListener;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 
 /**
@@ -15,10 +14,10 @@ import java.util.ArrayList;
 public class StartWindow {
     private JTabbedPane tabbedPane;
     protected JTextArea resultArea;
-    protected ChatClient chatClient;
+    protected ClientHandler chatClient;
 
 
-    public StartWindow(ChatClient chatClient) {
+    public StartWindow(ClientHandler chatClient) {
         this.chatClient = chatClient;
 
 

@@ -14,8 +14,8 @@ public class PeoplePane extends BasicPane {
     private DefaultListModel<String> peopleListModel;
     private JList<String> peopleList;
 
-    public PeoplePane(ChatClient chatClient) {
-        super(chatClient);
+    public PeoplePane(ClientHandler clientHandler) {
+        super(clientHandler);
 
     }
     public JComponent createMiddlePanel() {
@@ -46,7 +46,7 @@ public class PeoplePane extends BasicPane {
 
     public void fillPeopleList() {
         peopleListModel.removeAllElements();
-        ArrayList<String> people = chatClient.getPeople();
+        ArrayList<String> people = clientHandler.getPeople();
 
         for(String name : people) {
             peopleListModel.addElement(name);
@@ -66,7 +66,12 @@ public class PeoplePane extends BasicPane {
 
     class ActionHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-                chatClient.show();
+                String name = null;
+                name = peopleList.getSelectedValue();
+                if(name != null) {
+                    clientHandler.newChatWindow(name);
+                }
+
 
         }
 
@@ -98,7 +103,7 @@ public class PeoplePane extends BasicPane {
         public void run() {
             while(true) {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(6000);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }
