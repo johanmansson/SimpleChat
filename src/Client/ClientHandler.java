@@ -61,7 +61,7 @@ public class ClientHandler {
         Boolean test = false;
 
         for(int i = 0; i < chatWindows.size(); i++) {
-            if(chatWindows.get(i).getTitle() == name) {
+            if(chatWindows.get(i).getTitle().startsWith(name)) {
                 test = true;
                 chatWindows.get(i).show();
             }
@@ -112,7 +112,7 @@ public class ClientHandler {
                     if (input.startsWith("M:")) {
                         //System.out.println(input.substring(3));
                         for(NewChatWindow nCW: chatWindows) {
-                            nCW.add(input.substring(3));
+                            nCW.add(input.substring(2));
                         }
                     }
 

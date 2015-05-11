@@ -102,12 +102,13 @@ public class PeoplePane extends BasicPane {
 
         public void run() {
             while(true) {
+                fillPeopleList();
                 try {
                     Thread.sleep(6000);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }
-                fillPeopleList();
+
 
 
             }
