@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.charset.MalformedInputException;
 
 /**
  * Created by johanmansson on 15-04-27.
@@ -51,20 +52,23 @@ public class ConnectPane extends BasicPane {
             String port = fields[1].getText();
             String name = fields[2].getText();
 
-            if(!clientHandler.isConnected() && name.length() > 0) {
-                clientHandler.startConnection(ipAddress, port);
-                clientHandler.setName(name);
-                messageLabel.setText("Connected to server.");
+            if (clientHandler.isConnected()) {
+                messageLabel.setText("Client already connected.");
+            } else if (name.length() == 0 || port.length() == 0 || ipAddress.length() == 0) {
+                messageLabel.setText("All fields must be filled in.");
             } else {
-                messageLabel.setText("Could not connect or already connected.");
+                try {
+                    clientHandler.startConnection(ipAddress, port);
+                    clientHandler.setName(name);
+                    messageLabel.setText("Connected to server.");
+                } catch (Exception exception) {
+                    messageLabel.setText("Could not connect.");
+                }
+
+
             }
-
-
         }
-
-
     }
-
 
     public class InputPanel extends JPanel {
         private static final long serialVersionUID = 1;
@@ -108,7 +112,6 @@ public class ConnectPane extends BasicPane {
             }
         }
     }
-
 
 
 }
