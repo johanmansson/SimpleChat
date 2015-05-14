@@ -14,6 +14,7 @@ public class PeoplePane extends BasicPane {
     private DefaultListModel<String> peopleListModel;
     private JList<String> peopleList;
 
+
     public PeoplePane(ClientHandler clientHandler) {
         super(clientHandler);
 
@@ -50,8 +51,10 @@ public class PeoplePane extends BasicPane {
 
         for(String name : people) {
             peopleListModel.addElement(name);
+
         }
     }
+
 
     public void entryActions() {
 
@@ -68,9 +71,14 @@ public class PeoplePane extends BasicPane {
         public void actionPerformed(ActionEvent e) {
                 String name = null;
                 name = peopleList.getSelectedValue();
-                if(name != null) {
+                if (name.equals(ConnectPane.getUserName())){
+                   JFrame frame = new JFrame("Attention!");
+                    JOptionPane.showMessageDialog(frame, "Choose a different user than yourself!");
+           }
+                    else if(name != null) {
                     clientHandler.newChatWindow(name);
                 }
+
 
 
         }

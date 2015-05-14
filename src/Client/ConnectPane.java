@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.charset.MalformedInputException;
+import java.util.ArrayList;
 
 /**
  * Created by johanmansson on 15-04-27.
@@ -12,7 +13,7 @@ import java.nio.charset.MalformedInputException;
 public class ConnectPane extends BasicPane {
     private static final long serialVersionUID = 1;
     private JTextField[] fields;
-
+    public static String userName;
     private static final int NBR_FIELDS = 3;
 
     public ConnectPane(ClientHandler chatClient) {
@@ -46,21 +47,32 @@ public class ConnectPane extends BasicPane {
         clearMessage();
     }
 
+    public static String getUserName() {
+        return userName;
+    }
+
     class ActionHandler implements ActionListener {
+
+
         public void actionPerformed(ActionEvent e) {
             String ipAddress = fields[0].getText();
             String port = fields[1].getText();
             String name = fields[2].getText();
 
+
             if (clientHandler.isConnected()) {
                 messageLabel.setText("Client already connected.");
             } else if (name.length() == 0 || port.length() == 0 || ipAddress.length() == 0) {
                 messageLabel.setText("All fields must be filled in.");
+            } else if (clientHandler.getPeople().contains(name)) {
+                messageLabel.setText("Name already exists, choose a different one.");
             } else {
                 try {
+
                     clientHandler.startConnection(ipAddress, port);
                     clientHandler.setName(name);
                     messageLabel.setText("Connected to server.");
+                    userName = name;
                 } catch (Exception exception) {
                     messageLabel.setText("Could not connect.");
                 }
@@ -68,6 +80,9 @@ public class ConnectPane extends BasicPane {
 
             }
         }
+
+
+
     }
 
     public class InputPanel extends JPanel {
