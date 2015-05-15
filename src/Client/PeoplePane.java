@@ -19,6 +19,8 @@ public class PeoplePane extends BasicPane {
         super(clientHandler);
 
     }
+
+
     public JComponent createMiddlePanel() {
         peopleListModel = new DefaultListModel<String>();
 
@@ -49,7 +51,7 @@ public class PeoplePane extends BasicPane {
         peopleListModel.removeAllElements();
         ArrayList<String> people = clientHandler.getPeople();
 
-        for(String name : people) {
+        for (String name : people) {
             peopleListModel.addElement(name);
 
         }
@@ -69,16 +71,14 @@ public class PeoplePane extends BasicPane {
 
     class ActionHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-                String name = null;
-                name = peopleList.getSelectedValue();
-                if (name.equals(ConnectPane.getUserName())){
-                   JFrame frame = new JFrame("Attention!");
-                    JOptionPane.showMessageDialog(frame, "Choose a different user than yourself!");
-           }
-                    else if(name != null) {
-                    clientHandler.newChatWindow(name);
-                }
-
+            String name = null;
+            name = peopleList.getSelectedValue();
+            if (name.equals(ConnectPane.getUserName())) {
+                JFrame frame = new JFrame("Attention!");
+                JOptionPane.showMessageDialog(frame, "Choose a different user than yourself!");
+            } else if (name != null) {
+                clientHandler.newChatWindow(name);
+            }
 
 
         }
@@ -99,7 +99,6 @@ public class PeoplePane extends BasicPane {
             add(buttonPanel);
 
 
-
             for (int i = 0; i < buttons.length; i++) {
                 buttons[i].addActionListener(actHand);
             }
@@ -109,14 +108,13 @@ public class PeoplePane extends BasicPane {
     public class UpdateList extends Thread {
 
         public void run() {
-            while(true) {
+            while (true) {
                 fillPeopleList();
                 try {
                     Thread.sleep(6000);
-                }catch (InterruptedException e){
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
 
 
             }

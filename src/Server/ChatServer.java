@@ -17,19 +17,18 @@ public class ChatServer {
     private ArrayList<String> people;
 
 
-
-
-
     public static void main(String[] args) {
-        if(args.length!=1) {
+        if (args.length != 1) {
             System.out.println("Usage: java ChatServer <port number>");
             System.exit(1);
         }
         int portNbr = Integer.parseInt(args[0]);
         int maxNumberOfClients = 10;
+
         new ChatServer(portNbr, maxNumberOfClients);
 
     }
+
 
     public ChatServer(int portNbr, int maxNumberOfClients) {
         super();
@@ -43,6 +42,7 @@ public class ChatServer {
         try {
             serverSocket = new ServerSocket();
             serverSocket.bind(new InetSocketAddress(portNbr));
+
             System.out.println("Server running...");
 
             reader.start();
@@ -53,7 +53,7 @@ public class ChatServer {
             updateThread.start();
 
 
-            while(true) {
+            while (true) {
                 Socket clientSocket = serverSocket.accept();
                 ClientThread clientThread = new ClientThread(clientSocket, mailBox, clients);
                 clients.add(clientThread);
@@ -62,19 +62,15 @@ public class ChatServer {
                 clientThread.sendPeopleList();
 
 
-
             }
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
 
 
-
-
-
-
     }
+
 
 }

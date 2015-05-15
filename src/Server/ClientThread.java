@@ -15,7 +15,7 @@ public class ClientThread extends Thread {
     private Mailbox mailBox;
     private String name;
     private SimpleDateFormat timeStamp;
-    private Vector<ClientThread> clients;
+    public Vector<ClientThread> clients;
 
 
     public ClientThread(Socket clientSocket, Mailbox mailBox, Vector<ClientThread> clients) {
@@ -27,12 +27,12 @@ public class ClientThread extends Thread {
         timeStamp = new SimpleDateFormat("HH.mm");
 
 
-
     }
+
 
     public void run() {
 
-        System.out.println("New connection from: " + clientSocket.getInetAddress().getHostName() +": " + clientSocket.getPort());
+        System.out.println("New connection from: " + clientSocket.getInetAddress().getHostName() + ": " + clientSocket.getPort());
 
         try {
             String message = null;
@@ -40,7 +40,7 @@ public class ClientThread extends Thread {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            while(isRunning && (message = in.readLine()) != null) {
+            while (isRunning && (message = in.readLine()) != null) {
 
                 if (message.startsWith("Q:")) {
                     isRunning = false;
@@ -48,7 +48,6 @@ public class ClientThread extends Thread {
                 }
                 if (message.startsWith("N:")) {
                     name = message.substring(3);
-
 
 
                 }
@@ -68,23 +67,21 @@ public class ClientThread extends Thread {
         }
 
 
-
     }
 
     public void sendPeopleList() {
 
-        for(ClientThread ch : clients) {
+        for (ClientThread ch : clients) {
             String name = ch.getUserName();
-            if(name != "Anonymous") {
+            if (name != "Anonymous") {
                 writeToClient("P: " + name);
             }
         }
     }
 
-    public void sendFlushCommand(){
+    public void sendFlushCommand() {
         writeToClient("flush_SOME_CODE_TO_NOT_ACCIDENTALLY_WRITE_COMMAND");
     }
-
 
 
     public void writeToClient(String message) {
@@ -99,18 +96,15 @@ public class ClientThread extends Thread {
         }
 
 
-
-
-
     }
 
     public String getUserName() {
         return name;
     }
 
-    public Socket getSocket() { return clientSocket;}
-
-
+    public Socket getSocket() {
+        return clientSocket;
+    }
 
 
 }

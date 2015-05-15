@@ -53,19 +53,18 @@ public class ConnectPane extends BasicPane {
 
     class ActionHandler implements ActionListener {
 
-
         public void actionPerformed(ActionEvent e) {
             String ipAddress = fields[0].getText();
             String port = fields[1].getText();
             String name = fields[2].getText();
 
-
+            ;
             if (clientHandler.isConnected()) {
                 messageLabel.setText("Client already connected.");
             } else if (name.length() == 0 || port.length() == 0 || ipAddress.length() == 0) {
                 messageLabel.setText("All fields must be filled in.");
-            } else if (clientHandler.getPeople().contains(name)) {
-                messageLabel.setText("Name already exists, choose a different one.");
+                // } else if (kolla om unikt användarnamn) {
+                // messageLabel.setText("Name already exists, choose a different one.");
             } else {
                 try {
 
@@ -73,6 +72,7 @@ public class ConnectPane extends BasicPane {
                     clientHandler.setName(name);
                     messageLabel.setText("Connected to server.");
                     userName = name;
+
                 } catch (Exception exception) {
                     messageLabel.setText("Could not connect.");
                 }
@@ -80,7 +80,6 @@ public class ConnectPane extends BasicPane {
 
             }
         }
-
 
 
     }
