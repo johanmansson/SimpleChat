@@ -78,7 +78,7 @@ public class PeoplePane extends BasicPane {
                 JOptionPane.showMessageDialog(frame, "Choose a different user than yourself!");
             } else if (name != null) {
                 clientHandler.newChatWindow(name);
-            }
+            }//
 
 
         }

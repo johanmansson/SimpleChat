@@ -123,7 +123,7 @@ public class ConnectPane extends BasicPane {
 
             for (int i = 0; i < buttons.length; i++) {
                 buttons[i].addActionListener(actHand);
-            }
+            }//
         }
     }
 
