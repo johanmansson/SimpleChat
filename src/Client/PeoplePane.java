@@ -76,7 +76,7 @@ public class PeoplePane extends BasicPane {
             if (name.equals(ConnectPane.getUserName())) {
                 JFrame frame = new JFrame("Attention!");
                 JOptionPane.showMessageDialog(frame, "Choose a different user than yourself!");
-            } else if (name != null) {
+            } else if (name != null && clientHandler.isConnected()) {
                 clientHandler.newChatWindow(name);
             }
 

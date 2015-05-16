@@ -24,7 +24,7 @@ public class ConnectPane extends BasicPane {
         String[] texts = new String[NBR_FIELDS];
         texts[0] = "IP-Address:";
         texts[1] = "Port:";
-        texts[2] = "Name:";
+        texts[2] = "Username:";
         fields = new JTextField[NBR_FIELDS];
         fields[0] = new JTextField(20);
         fields[1] = new JTextField(20);
@@ -58,19 +58,16 @@ public class ConnectPane extends BasicPane {
             String port = fields[1].getText();
             String name = fields[2].getText();
 
-            ;
+
             if (clientHandler.isConnected()) {
                 messageLabel.setText("Client already connected.");
             } else if (name.length() == 0 || port.length() == 0 || ipAddress.length() == 0) {
                 messageLabel.setText("All fields must be filled in.");
-                // } else if (kolla om unikt användarnamn) {
-                // messageLabel.setText("Name already exists, choose a different one.");
+
             } else {
                 try {
-
-                    clientHandler.startConnection(ipAddress, port);
-                    clientHandler.setName(name);
-                    messageLabel.setText("Connected to server.");
+                    String message = clientHandler.startConnection(ipAddress, port, name);
+                    messageLabel.setText(message);
                     userName = name;
 
                 } catch (Exception exception) {

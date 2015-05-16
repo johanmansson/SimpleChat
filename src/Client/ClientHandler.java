@@ -16,11 +16,18 @@ public class ClientHandler {
     private ArrayList<NewChatWindow> chatWindows;
 
 
+
+
+
+
     public ClientHandler() {
 
         isConnected = false;
         people = new ArrayList<String>();
         chatWindows = new ArrayList<NewChatWindow>();
+
+
+
 
     }
 
@@ -28,34 +35,59 @@ public class ClientHandler {
         return isConnected;
     }
 
-    public void startConnection(String address, String inPort) {
+    public String startConnection(String address, String inPort, String name) {
         socket = null;
+        String message = "Connected to server!";
+
         try {
             int port = Integer.parseInt(inPort);
             socket = new Socket(address, port);
             System.out.println("Connected to: " + socket.getInetAddress().getHostName());
             GetInputThread writer = new GetInputThread(socket);
             writer.start();
+
             isConnected = true;
+
+            while(true) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (String testName : people) {
+                    if (testName.startsWith(name)) {
+                        message = "Username is already taken!";
+                        isConnected = false;
+                        writer.killThread();
+                        writer.join();
+
+
+
+                    }
+                }
+                break;
+            }
+
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            if(isConnected()) {
+                out.println("N: " + name);
+
+            }
 
 
 
         } catch(IOException e) {
             System.out.println(e);
-
-        }
-
-    }
-
-    public void setName(String name) {
-        try {
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            out.println("N: " + name);
-
-        } catch (IOException e) {
+        } catch(InterruptedException e) {
             e.printStackTrace();
         }
+
+
+        return message;
+       
+
     }
+
 
     public void newChatWindow(String name) {
         Boolean test = false;
@@ -91,9 +123,16 @@ public class ClientHandler {
 
     public class GetInputThread extends Thread {
         private Socket socket;
+        private Boolean killThread;
 
         public GetInputThread(Socket socket) {
             this.socket = socket;
+            killThread = false;
+
+        }
+
+        public void killThread() {
+            killThread = true;
         }
 
         public void run() {
@@ -101,7 +140,7 @@ public class ClientHandler {
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                while ((input = in.readLine()) != null ) {
+                while ((input = in.readLine()) != null && killThread == false) {
 
                     if (input.startsWith("P:")) {
                         people.add(input.substring(3));
