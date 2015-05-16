@@ -63,8 +63,11 @@ public class PeoplePane extends BasicPane {
         clearMessage();
 
         //Updates peopleList automatic
-        UpdateList update = new UpdateList();
-        update.start();
+        if(clientHandler.isConnected()) {
+            UpdateList update = new UpdateList();
+            update.start();
+        }
+
 
     }
 
@@ -76,7 +79,7 @@ public class PeoplePane extends BasicPane {
             if (name.equals(ConnectPane.getUserName())) {
                 JFrame frame = new JFrame("Attention!");
                 JOptionPane.showMessageDialog(frame, "Choose a different user than yourself!");
-            } else if (name != null && clientHandler.isConnected()) {
+            } else if (name != null) {
                 clientHandler.newChatWindow(name);
             }
 

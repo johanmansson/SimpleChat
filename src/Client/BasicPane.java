@@ -22,7 +22,7 @@ public class BasicPane extends JPanel {
         setLayout(new BorderLayout());
 
         JComponent leftPanel = createLeftPanel();
-        add(leftPanel, BorderLayout.WEST);
+        add(leftPanel, BorderLayout.CENTER);
 
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
