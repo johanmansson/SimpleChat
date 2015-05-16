@@ -55,7 +55,7 @@ public class ClientHandler {
                     e.printStackTrace();
                 }
                 for (String testName : people) {
-                    if (testName.startsWith(name)) {
+                    if (testName.equals(name)) {
                         message = "Username is already taken!";
                         isConnected = false;
                         writer.killThread();
