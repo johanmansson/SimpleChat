@@ -14,7 +14,7 @@ public class ClientHandler {
     private Boolean isConnected;
     private ArrayList<String> people;
     private ArrayList<NewChatWindow> chatWindows;
-
+    private String userName;
 
 
 
@@ -38,6 +38,7 @@ public class ClientHandler {
     public String startConnection(String address, String inPort, String name) {
         socket = null;
         String message = "Connected to server!";
+        userName = name;
 
         try {
             int port = Integer.parseInt(inPort);
@@ -96,13 +97,15 @@ public class ClientHandler {
             if(chatWindows.get(i).getTitle().startsWith(name)) {
                 test = true;
                 chatWindows.get(i).show();
+
             }
         }
 
         if(test == false) {
-            NewChatWindow temp = new NewChatWindow(100,100,name, socket);
+            NewChatWindow temp = new NewChatWindow(100,100,name, userName, socket);
             temp.show();
             chatWindows.add(temp);
+
 
         }
 
@@ -149,10 +152,34 @@ public class ClientHandler {
                         flushPeople();
                     }
                     if (input.startsWith("M:")) {
-                        //System.out.println(input.substring(3));
-                        for(NewChatWindow nCW: chatWindows) {
-                            nCW.add(input.substring(2));
+                        System.out.println(input);
+
+                        String[] inputParts = input.split(":");
+
+                        if(inputParts[1].equals(userName)) {
+                            newChatWindow(inputParts[2]);
+
                         }
+
+                        for(NewChatWindow nCW: chatWindows) {
+                            if(nCW.getTitle().equals(inputParts[1])) {
+                                nCW.add(nCW.getSendFrom() + ": " + inputParts[3]);
+                            }
+                            if(nCW.getTitle().equals(inputParts[2])) {
+                                nCW.add(nCW.getTitle() + ": " + inputParts[3]);
+                            }
+
+//
+//                                   StringBuilder sb = new StringBuilder();
+//                                   for(int i = 3; i < inputParts.length; i++) {
+//                                       sb.append(inputParts[i]);
+//                                   }
+
+
+
+                        }
+
+
                     }
 
 

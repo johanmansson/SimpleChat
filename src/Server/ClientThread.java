@@ -52,8 +52,8 @@ public class ClientThread extends Thread {
 
                 }
                 if (message.startsWith("M:")) {
-
-                    mailBox.setMessage("M:" + timeStamp.format(Calendar.getInstance().getTime()) + " " + name + ": " + message.substring(3));
+                    mailBox.setMessage(message);
+                    //mailBox.setMessage("M:" + timeStamp.format(Calendar.getInstance().getTime()) + " " + name + ": " + message.substring(3));
                 }
 
             }
