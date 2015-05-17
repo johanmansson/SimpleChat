@@ -160,22 +160,20 @@ public class ClientHandler {
                             newChatWindow(inputParts[2]);
 
                         }
+                        StringBuilder sb = new StringBuilder();
+                        for(int i = 3; i < inputParts.length; i++) {
+                            sb.append(inputParts[i]);
+                        }
+                        String message = sb.toString();
+
 
                         for(NewChatWindow nCW: chatWindows) {
                             if(nCW.getTitle().equals(inputParts[1])) {
-                                nCW.add(nCW.getSendFrom() + ": " + inputParts[3]);
+                                nCW.add(nCW.getSendFrom() + ": " + message);
                             }
                             if(nCW.getTitle().equals(inputParts[2])) {
-                                nCW.add(nCW.getTitle() + ": " + inputParts[3]);
+                                nCW.add(nCW.getTitle() + ": " + message);
                             }
-
-//
-//                                   StringBuilder sb = new StringBuilder();
-//                                   for(int i = 3; i < inputParts.length; i++) {
-//                                       sb.append(inputParts[i]);
-//                                   }
-
-
 
                         }
 
