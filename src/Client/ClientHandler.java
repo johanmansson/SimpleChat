@@ -3,7 +3,11 @@ package Client;
 
 import java.io.*;
 import java.net.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -161,18 +165,27 @@ public class ClientHandler {
 
                         }
                         StringBuilder sb = new StringBuilder();
-                        for(int i = 3; i < inputParts.length; i++) {
-                            sb.append(inputParts[i]);
+                        sb.append(inputParts[3]);
+
+                        if(inputParts.length > 3) {
+                            for(int i = 4; i < inputParts.length; i++) {
+                                sb.append(":" + inputParts[i]);
+                            }
                         }
+
                         String message = sb.toString();
 
 
+
+                        SimpleDateFormat timeStamp = new SimpleDateFormat("HH.mm");
+                        String time = timeStamp.format(Calendar.getInstance().getTime());
+
                         for(NewChatWindow nCW: chatWindows) {
                             if(nCW.getTitle().equals(inputParts[1])) {
-                                nCW.add(nCW.getSendFrom() + ": " + message);
+                                nCW.add(time + ": " + nCW.getSendFrom() + ": " + message);
                             }
                             if(nCW.getTitle().equals(inputParts[2])) {
-                                nCW.add(nCW.getTitle() + ": " + message);
+                                nCW.add(time + ": " + nCW.getTitle() + ": " + message);
                             }
 
                         }
