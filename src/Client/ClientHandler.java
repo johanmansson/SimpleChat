@@ -1,6 +1,7 @@
 package Client;
 
 
+import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.text.DateFormat;
@@ -123,6 +124,10 @@ public class ClientHandler {
         return people;
     }
 
+    public String getUserName() { return userName; }
+
+    public Socket getSocket() {return socket; }
+
     public void flushPeople(){
         people = new ArrayList<String>();
     }
@@ -191,6 +196,62 @@ public class ClientHandler {
                         }
 
 
+                    }
+                    if (input.startsWith("R:")){
+                        //Filöverföring
+
+                        String parts[] = input.split(":");
+                        int port = Integer.parseInt(parts[1]);
+                        String address = parts[2];
+                        String senderString = parts[3];
+
+                        JFrame frame = new JFrame("Attention!");
+                        //Option to not receive
+                        //JOptionPane.showMessageDialog(frame, "User " + senderString + " is sending you a file");
+                        int selectedOption = JOptionPane.showConfirmDialog(null, "User " + senderString + " wants to send you a file. Accept?", "Accept?", JOptionPane.YES_NO_OPTION);
+                        if(selectedOption == JOptionPane.YES_OPTION) {
+
+
+                            ReceiveFileThread receiveFileThread = new ReceiveFileThread(port);
+                            receiveFileThread.start();
+
+                            //Send message to server to confirm readyness
+                            OutputStream os = null;
+                            try {
+                                os = socket.getOutputStream();
+                            } catch (IOException exception) {
+                                exception.printStackTrace();
+                            }
+                            PrintWriter out = new PrintWriter(os, true);
+                            out.println("F2:" + port + ":" + address + ":" + senderString);
+                        }else{
+                            OutputStream os = null;
+                            try {
+                                os = socket.getOutputStream();
+                            } catch (IOException exception) {
+                                exception.printStackTrace();
+                            }
+                            PrintWriter out = new PrintWriter(os, true);
+                            out.println("F3:"+ senderString);
+                        }
+                    }
+
+                    if(input.startsWith("S:")){
+                        System.out.println("Test - S innan tråd");
+
+                        String parts[] = input.split(":");
+                        int port = Integer.parseInt(parts[1]);
+                        String addressString = parts[2].substring(parts[2].indexOf('/') + 1);
+                        System.out.println(addressString);
+                        InetAddress address = InetAddress.getByName(addressString);
+                        System.out.println("test efter getByName");
+                        SendFileThread sendFileThread = new SendFileThread(address,port);
+                        sendFileThread.start();
+                    }
+
+                    if(input.startsWith("S2:")){
+                        JFrame frame = new JFrame("Attention!");
+                        JOptionPane.showMessageDialog(frame, "The person you want to send files to does not want them.");
                     }
 
 

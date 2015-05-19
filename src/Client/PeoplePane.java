@@ -4,7 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.net.Socket;
 
 /**
  * Created by johanmansson on 15-04-27.
@@ -42,7 +46,8 @@ public class PeoplePane extends BasicPane {
         buttons[0] = new JButton("Start Chat");
         buttons[1] = new JButton("Send file");
         ActionHandler actHand = new ActionHandler();
-        return new ButtonPanel(buttons, actHand);
+        ActionHandler2 actHandFile = new ActionHandler2();
+        return new ButtonPanel(buttons, actHand, actHandFile);
 
 
     }
@@ -88,11 +93,34 @@ public class PeoplePane extends BasicPane {
 
     }
 
+    class ActionHandler2 implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String name = null;
+            Socket socket = clientHandler.getSocket();
+            OutputStream os = null;
+            try{
+                os = socket.getOutputStream();
+            }catch(IOException exception){
+                exception.printStackTrace();
+            }
+            name = peopleList.getSelectedValue();
+            if (name.equals(ConnectPane.getUserName())) {
+                JFrame frame = new JFrame("Attention!");
+                JOptionPane.showMessageDialog(frame, "Choose a different user than yourself!");
+            }else if (name != null) {
+                PrintWriter out = new PrintWriter(os, true);
+                //Först sender, sen receiver
+                out.println("F:" + clientHandler.getUserName() +  ":" + name);
+            }
+
+        }
+    }
+
     public class ButtonPanel extends JPanel {
         private static final long serialVersionUID = 1;
 
         public ButtonPanel(JButton[] buttons,
-                           ActionListener actHand) {
+                           ActionListener actHand, ActionListener actHandFile) {
             setLayout(new GridLayout(1, 1));
 
             JPanel buttonPanel = new JPanel();
@@ -101,10 +129,12 @@ public class PeoplePane extends BasicPane {
             }
             add(buttonPanel);
 
-
+            /*
             for (int i = 0; i < buttons.length; i++) {
                 buttons[i].addActionListener(actHand);
-            }
+            }*/
+            buttons[0].addActionListener(actHand);
+            buttons[1].addActionListener(actHandFile);
         }
     }
 

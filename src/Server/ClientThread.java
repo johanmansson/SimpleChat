@@ -5,6 +5,7 @@ import java.net.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
+import java.util.Random;
 
 /**
  * Created by johanmansson on 15-04-12.
@@ -15,6 +16,7 @@ public class ClientThread extends Thread {
     private Mailbox mailBox;
     private String name;
     private SimpleDateFormat timeStamp;
+    private Random rng;
     public Vector<ClientThread> clients;
 
 
@@ -25,6 +27,8 @@ public class ClientThread extends Thread {
         this.clients = clients;
         name = "Anonymous";
         timeStamp = new SimpleDateFormat("HH.mm");
+        rng = new Random();
+
 
 
     }
@@ -54,6 +58,46 @@ public class ClientThread extends Thread {
                 if (message.startsWith("M:")) {
                     mailBox.setMessage(message);
                     //mailBox.setMessage("M:" + timeStamp.format(Calendar.getInstance().getTime()) + " " + name + ": " + message.substring(3));
+                }
+
+                if( message.startsWith("F:")){
+                    String[] parts = message.split(":");
+                    String senderString = parts[1];
+                    String receiverString = parts[2];
+                    ClientThread receiver = findClient(receiverString, clients);
+                    Socket receiveSocket = receiver.getSocket();
+                    InetAddress address = receiveSocket.getInetAddress();
+                    int port = 30001 + rng.nextInt(10000);
+
+                    try {
+                        receiver.writeToClient("R:" + port + ":" + address.toString() + ":" + senderString);
+                    }catch(NullPointerException e){
+                        e.printStackTrace();
+                    }
+
+                }
+                if(message.startsWith("F2:")){
+                    System.out.println("Test - ServerF2");
+                    String[] parts = message.split(":");
+                    int port = Integer.parseInt(parts[1]);
+                    String address = parts[2];
+                    String senderString = parts[3];
+                    ClientThread sender = findClient(senderString,clients);
+                    try {
+                        sender.writeToClient("S:" + port + ":" + address.toString());
+                    }catch(NullPointerException e){
+                        e.printStackTrace();
+                    }
+
+                }
+                if(message.startsWith("F3:")){
+                    String[] parts = message.split(":");
+                    ClientThread sender = findClient(parts[1],clients);
+                    try {
+                        sender.writeToClient("S2:");
+                    }catch(NullPointerException e){
+                        e.printStackTrace();
+                    }
                 }
 
             }
@@ -104,6 +148,16 @@ public class ClientThread extends Thread {
 
     public Socket getSocket() {
         return clientSocket;
+    }
+
+    private ClientThread findClient(String name, Vector<ClientThread> clients){
+        for(ClientThread ct : clients){
+            String clientName = ct.getUserName();
+            if (clientName.equals(name)){
+                return ct;
+            }
+        }
+        return null; //should never happen
     }
 
 
