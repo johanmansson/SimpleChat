@@ -34,13 +34,17 @@ public class SendFileThread extends  Thread{
         fd.setVisible(true);
         String filename = fd.getFile();
         String dirName = fd.getDirectory();
+        File file = null;
         if (filename == null){
             System.out.println("You cancelled the choice");
             message = "abort";
         }else{
             message = filename;
+            file = new File(dirName + filename);
         }
-        File file = new File(dirName + filename);
+
+
+
         frame.dispose();
 
 
@@ -61,7 +65,7 @@ public class SendFileThread extends  Thread{
 
 
         PrintWriter pw = new PrintWriter(socketOs);
-        System.out.print(file.getName());
+        //System.out.print(file.getName());
         //pw.print(file.getName());
         pw.print(message);
         pw.print('\n');
@@ -69,7 +73,7 @@ public class SendFileThread extends  Thread{
         //pw.close();
 
 
-        if(true){
+        if(! message.equals("abort")){
             //if(out != null){
 
 
