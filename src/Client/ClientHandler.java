@@ -56,7 +56,7 @@ public class ClientHandler {
 
             while(true) {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -170,13 +170,14 @@ public class ClientHandler {
 
                         }
                         StringBuilder sb = new StringBuilder();
-                        sb.append(inputParts[3]);
 
                         if(inputParts.length > 3) {
+                            sb.append(inputParts[3]);
                             for(int i = 4; i < inputParts.length; i++) {
                                 sb.append(":" + inputParts[i]);
                             }
                         }
+
 
                         String message = sb.toString();
 
