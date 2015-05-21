@@ -108,6 +108,8 @@ public class PeoplePane extends BasicPane {
                 JFrame frame = new JFrame("Attention!");
                 JOptionPane.showMessageDialog(frame, "Choose a different user than yourself!");
             }else if (name != null) {
+                JFrame frame = new JFrame("Attention!");
+                JOptionPane.showMessageDialog(frame, "User " + name + " will have to accept the transfer before it begins.");
                 PrintWriter out = new PrintWriter(os, true);
                 //Först sender, sen receiver
                 out.println("F:" + clientHandler.getUserName() +  ":" + name);

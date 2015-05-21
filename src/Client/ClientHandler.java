@@ -238,13 +238,18 @@ public class ClientHandler {
 
                     if(input.startsWith("S:")){
                         System.out.println("Test - S innan tråd");
-
+                        String addressString = null;
                         String parts[] = input.split(":");
                         int port = Integer.parseInt(parts[1]);
-                        String addressString = parts[2].substring(parts[2].indexOf('/') + 1);
+                        if(parts[2].contains("/")) {
+                            addressString = parts[2].substring(parts[2].indexOf('/') + 1);
+                        }else{
+                            addressString = parts[2];
+                        }
                         System.out.println(addressString);
                         InetAddress address = InetAddress.getByName(addressString);
-                        System.out.println("test efter getByName");
+                        JFrame frame = new JFrame("Accepted!");
+                        JOptionPane.showMessageDialog(frame, "File transfer accepted!");
                         SendFileThread sendFileThread = new SendFileThread(address,port);
                         sendFileThread.start();
                     }
@@ -260,10 +265,6 @@ public class ClientHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
-
     }
-
 }

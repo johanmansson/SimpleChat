@@ -57,12 +57,29 @@ public class ReceiveFileThread extends Thread{
 
 
             if(!inputString.equals("abort")) {
-                String directory = choosePlace();
+                //String directory = choosePlace();
+                //new stuff
+                String directory;
+                File dirFile = new File(System.getProperty("user.dir") + "/ReceivedFiles/");
+                if(dirFile.exists()){
+                    directory = System.getProperty("user.dir") +  "/ReceivedFiles/";
+                }else{
+                    dirFile.mkdir();
+                    directory = System.getProperty("user.dir") + "/ReceivedFiles/";
+                }
+                System.out.println(directory);
+
+
+
+
+
+
                 if (!directory.equals("abort")) {
                     String path = fixName(directory, inputString);
                     if (!path.equals("CODE_FOR_ABORT")) {
                         byte[] aByte = new byte[1]; //???? storlek?
-                        //String path = "/Users/Emil/Documents/networkprog/proj/test2.jpg";
+
+
 
                         int bytesRead;
                         //FILE-STUFF
