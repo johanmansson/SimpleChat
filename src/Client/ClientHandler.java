@@ -187,10 +187,10 @@ public class ClientHandler {
                         String time = timeStamp.format(Calendar.getInstance().getTime());
 
                         for(NewChatWindow nCW: chatWindows) {
-                            if(nCW.getTitle().equals(inputParts[1])) {
+                            if(nCW.getTitle().equals(inputParts[1]) && userName.equals(inputParts[2])) {
                                 nCW.add(time + ": " + nCW.getSendFrom() + ": " + message);
                             }
-                            if(nCW.getTitle().equals(inputParts[2])) {
+                            if(userName.equals(inputParts[1]) && nCW.getTitle().equals(inputParts[2])) {
                                 nCW.add(time + ": " + nCW.getTitle() + ": " + message);
                             }
 
